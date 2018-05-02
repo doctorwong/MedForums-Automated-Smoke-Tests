@@ -1,1 +1,1 @@
-# MedForums-Automated-Smoke-Tests
+# MedForums-Automated-Smoke-TestsMedForums-Automated-Smoke-Tests
