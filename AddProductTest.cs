@@ -22,19 +22,21 @@ namespace MedForums_testing
         public void LoadSiteAsAdmin()
         {
             driver = new ChromeDriver("C:\\chromedriver");
-            driver.Url = "http://medforums-qa.us-west-2.elasticbeanstalk.com/admin/";
-            
+            driver.Url = "http://medforums-qa.us-west-2.elasticbeanstalk.com/admin/";        
         }
+
         [Test]
+        //Login into web app
 
-        public void tests()
+        public void SmokeTest()
         {
-
-            //Login and navigate to main page
+            //Logs into web app and verifies user is logged in as admin
             driver.FindElement(By.CssSelector("input[id='id_username']")).SendKeys("medforums");
             driver.FindElement(By.CssSelector("input[id='id_password']")).SendKeys("medforums!");
             driver.FindElement(By.CssSelector("input[value='Log in']")).Click();
             driver.FindElement(By.LinkText("VIEW SITE")).Click();
+            IWebElement loggedIn = driver.FindElement(By.TagName("body"));
+            Assert.IsTrue(loggedIn.Text.Contains("Admin"));
 
             //Click 'Feature your Education Product'
             driver.FindElement(By.LinkText("Feature your Education Product")).Click();
@@ -118,12 +120,19 @@ namespace MedForums_testing
             Assert.IsTrue(locationVenueName.Text.Contains("Sanctum Santorum"));
             IWebElement locationAddress = driver.FindElement(By.ClassName("location-address"));
             Assert.IsTrue(locationAddress.Text.Contains("177a Bleecker St, New York, NY 10012"));
+
+            //Tests if a user can log out of the web app
+            driver.FindElement(By.CssSelector("div[class='profile-picture']")).Click();
+            driver.FindElement(By.CssSelector("button[class='btn btn-light']")).Click();
+            IWebElement loggedOut = driver.FindElement(By.TagName("body"));
+            Assert.IsTrue(loggedOut.Text.Contains("Log In"));
         }
 
         [TearDown]
-        public void closeBrowser()
+        //Closes the browser
+        public void Logout()
         {
-            //driver.Close();
+            driver.Close();
         }
     }
 }
