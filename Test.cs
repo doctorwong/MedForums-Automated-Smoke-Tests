@@ -18,6 +18,21 @@ namespace MedForums_testing
             driver.Url = "http://medforums-qa.us-west-2.elasticbeanstalk.com/admin/";
         }
 
+        [Test(Description = "Log in")]
+        public void LogIn()
+        {
+            Methods Methods = new Methods();
+            Methods.Login();
+        }
+
+        [Test(Description = "Log out")]
+        public void LogOut()
+        {
+            Methods Methods = new Methods();
+            Methods.Login();
+            Methods.Logout();
+        }
+
         [Test(Description = "add conference")]
         public void AddConference()
         {
