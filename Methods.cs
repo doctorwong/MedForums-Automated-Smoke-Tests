@@ -15,7 +15,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace MedForums_testing
 {
-    public class Functions
+    public class Methods
     {
         IWebDriver driver;
         public void Login()
@@ -43,68 +43,44 @@ namespace MedForums_testing
 
             switch (productType)
             {
+                //Selects the product type specified, and inputs information relevant to that product type
                 case "app":
-                    //Click App
-                    driver.FindElement(By.ClassName(Selectors.app)).Click();
-
-                    //Enter Apple Link
-                    driver.FindElement(By.CssSelector(Selectors.appleLink)).SendKeys(Data.appleLink);
-
-                    //Enter Google link
-                    driver.FindElement(By.CssSelector(Selectors.googleLink)).SendKeys(Data.googleLink);
+                    driver.FindElement(By.LinkText("App")).Click();
+                    driver.FindElement(By.Id(Selectors.appleLink)).SendKeys(Data.appleLink);
+                    driver.FindElement(By.Id(Selectors.googleLink)).SendKeys(Data.googleLink);
                     break;
 
                 case "conference":
-                    //Click Conference
-                    driver.FindElement(By.ClassName(Selectors.conference)).Click();
-
-                    //Enter Start Date
+                    driver.FindElement(By.LinkText("Conference")).Click();
                     driver.FindElement(By.Id(Selectors.startDate)).SendKeys(Data.startDate);
-
-                    //Enter End Date
                     driver.FindElement(By.Id(Selectors.endDate)).SendKeys(Data.endDate);
-
-                    //Enter location venue name
                     driver.FindElement(By.Id(Selectors.venueName)).SendKeys(Data.venueName);
-
-                    //Enter location address
                     driver.FindElement(By.Id(Selectors.locationAddress)).SendKeys(Data.locationAddress);
-
-                    //Enter conference location
                     driver.FindElement(By.CssSelector(Selectors.conferenceLocation)).SendKeys(Data.conferenceLocation);
                     break;
 
                 case "book":
-                    //Click Book
-                    driver.FindElement(By.ClassName(Selectors.book)).Click();
-
-                    //Enter Page Count
+                    driver.FindElement(By.LinkText("Book")).Click();
+                    driver.FindElement(By.Id(Selectors.bookAuthor)).SendKeys(Data.bookAuthor);
                     driver.FindElement(By.Id(Selectors.pageCount)).SendKeys(Data.pageCount);
-
-                    //Enter ISBN
                     driver.FindElement(By.Id(Selectors.ISBN)).SendKeys(Data.ISBN);
                     break;
 
                 case "blog":
-                    //Click Blog
-                    driver.FindElement(By.ClassName(Selectors.blog)).Click();
-                    driver.FindElement(By.CssSelector(Selectors.blogAuthor)).SendKeys(Data.blogAuthor);
+                    driver.FindElement(By.LinkText("Blog")).Click();
+                    driver.FindElement(By.Id(Selectors.blogAuthor)).SendKeys(Data.blogAuthor);
                     break;
 
                 case "course":
-                    //Click Course
-                    driver.FindElement(By.ClassName(Selectors.course)).Click();
-                    driver.FindElement(By.CssSelector(Selectors.courseStart)).SendKeys(Data.courseEnd);
+                    driver.FindElement(By.LinkText("Course")).Click();
                     break;
 
                 case "onlineResource":
-                    //Click Online Resource
-                    driver.FindElement(By.ClassName(Selectors.onlineResource)).Click();
+                    driver.FindElement(By.LinkText("Online Resource")).Click();
                     break;
 
                 case "podcast":
-                    //Click Podcast
-                    driver.FindElement(By.ClassName(Selectors.podcast)).Click();
+                    driver.FindElement(By.LinkText("Podcast")).Click();
                     break;
 
                 default:
@@ -132,9 +108,6 @@ namespace MedForums_testing
             //discount code
             driver.FindElement(By.Id(Selectors.discountCode)).SendKeys(Data.discountCode);
 
-            //facebook link
-            driver.FindElement(By.Id(Selectors.facebookLink)).SendKeys(Data.facebookLink);
-
             //twitter link
             driver.FindElement(By.Id(Selectors.twitterLink)).SendKeys(Data.twitterLink);
 
@@ -155,61 +128,21 @@ namespace MedForums_testing
             //Click Submit
             driver.FindElement(By.CssSelector(Selectors.submitButton)).Click();
 
-            //Verify Fields
-            switch (productType)
-            {
-                case "app":
-                    IWebElement productAuthor = driver.FindElement(By.Id(Selectors.productAuthor));
-                    Assert.IsTrue(productAuthor.Text.Contains(Data.appAuthor));
-                    break;
-
-                case "book":
-                    IWebElement bookAuthor = driver.FindElement(By.Id(Selectors.productAuthor));
-                    Assert.IsTrue(bookAuthor.Text.Contains(Data.bookAuthor));
-                    break;
-
-                case "blog":
-                    IWebElement blogAuthor = driver.FindElement(By.Id(Selectors.productAuthor));
-                    Assert.IsTrue(productAuthor.Text.Contains(Data.blogAuthor));
-                    break;
-                /*
-                case "conference":
-                    IWebElement conferenceLocation = driver.FindElement(By.CssSelector(Selectors.conferenceLocation));
-                    Assert.IsTrue(conferenceLocation.Text.Contains(Data.conferenceLocation));
-                    IWebElement locationVenueName = driver.FindElement(By.ClassName(Selectors.venueName));
-                    Assert.IsTrue(locationVenueName.Text.Contains(Data.venueName));
-                    IWebElement locationAddress = driver.FindElement(By.ClassName(Selectors.locationAddress));                  
-                    Assert.IsTrue(locationAddress.Text.Contains(Data.locationAddress));
-                    break;
-                    */
-
-
-                default:
-                    break;
-            }
+            //Verify Product Creation
             IWebElement productName = driver.FindElement(By.CssSelector(Selectors.productName));
             Assert.IsTrue(productName.Text.Contains(Data.name));
+        }
 
-            IWebElement productDescription = driver.FindElement(By.Id(Selectors.productDescription));
-            Assert.IsTrue(productDescription.Text.Contains(Data.description));
-
-            
-            break;
-
-
+        public void Logout()
+        {
+            //Tests if a user can log out of the web app
+            driver.FindElement(By.CssSelector("div[class='profile-picture']")).Click();
+            driver.FindElement(By.CssSelector("button[class='btn btn-light']")).Click();
+            IWebElement loggedOut = driver.FindElement(By.TagName("body"));
+            Assert.IsTrue(loggedOut.Text.Contains("Log In"));
+            driver.Close();
         }
     }
-    public void Logout()
-    {
-        //Tests if a user can log out of the web app
-        driver.FindElement(By.CssSelector("div[class='profile-picture']")).Click();
-        driver.FindElement(By.CssSelector("button[class='btn btn-light']")).Click();
-        IWebElement loggedOut = driver.FindElement(By.TagName("body"));
-        Assert.IsTrue(loggedOut.Text.Contains("Log In"));
-        driver.Close();
-    }
+
 }
-class Tests
-{
-    public void LoadSiteAsAdmin() => Functions.Login();
-}
+
